@@ -15,7 +15,14 @@ def main() -> None:
         script.write("#!/bin/bash\n".encode())
         script.write(args.shellcode.encode())
         script.flush()
-        subprocess.call(["sbatch", script.name])
+        result = subprocess.run(
+            ["sbatch", script.name], stdout=subprocess.PIPE, check=False
+        )
+        if result:
+            stdout = result.stdout.decode()
+            if stdout.startswith("Submitted batch job "):
+                job_id = stdout.split()[-1]
+                print(f"Job <{job_id}> is submitted to default queue <normal>.")
 
 
 if __name__ == "__main__":
