@@ -1,0 +1,71 @@
+[build-system]
+requires = [
+    "setuptools",
+    "setuptools_scm[toml]",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "src/lsftoslurm/version.py"
+
+[project]
+name = "lsftoslurm"
+description = "Wrapper to mock some LSF commands around Slurm"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Equinor", email = "fg_scout@equinor.com" },
+]
+classifiers = [
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Natural Language :: English",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+]
+dynamic = ["version"]
+dependencies = []
+
+[project.optional-dependencies]
+tests = [
+    "black",
+    "mypy",
+    "pylint",
+    "pytest",
+    "ruff",
+]
+
+
+[project.scripts]
+bsub = "lsftoslurm.bsub:main"
+bkill = "lsftoslurm.bkill:main"
+bjobs = "lsftoslurm.bjobs:main"
+
+[tool.black]
+line-length = 88
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.pylint]
+# Module docstrings are not required, there are other means of documenting at
+# that level in subscript
+disable = "missing-module-docstring"
+
+[tool.ruff]
+src = ["src"]
+select = [
+  "W",   # pycodestyle
+  "I",   # isort
+  "B",   # flake-8-bugbear
+  "SIM", # flake-8-simplify
+  "F",   # pyflakes
+  "PL",  # pylint
+]
+line-length = 88
+
