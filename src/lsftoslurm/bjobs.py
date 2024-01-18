@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 class JobState(str, Enum):
     RUNNING = "RUNNING"
+    CANCELLED = "CANCELLED"
 
 
 class Job(BaseModel):
@@ -34,7 +35,10 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def lsf_formatter(jobstats: List[Job]) -> str:
-    lsfstates: Mapping[JobState, str] = {JobState.RUNNING: "RUN"}
+    lsfstates: Mapping[JobState, str] = {
+        JobState.RUNNING: "RUN",
+        JobState.CANCELLED: "KILL?",
+    }
     string = "JOBID USER     STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME\n"
     for job in jobstats:
         submit_time = datetime.utcfromtimestamp((job.submit_time))
